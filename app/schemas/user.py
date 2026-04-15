@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field, field_validator, EmailStr
-# from fastapi.responses import HTMLResponse
 from datetime import datetime
 
 
@@ -18,6 +17,16 @@ class RegisterUser(BaseModel):
         # вернуть значение
         return n
 
+    @field_validator('password')
+    def password_not_empty(cls, p: str) -> str:
+        # убрать пробелы
+        p = p.strip()
+        # проверить что строка не пустая
+        if not p:
+            raise ValueError('Password cannot be empty')
+        # вернуть значение
+        return p
+
 class LoginUser(BaseModel):
     email: EmailStr
     password: str
@@ -27,6 +36,9 @@ class LoginUser(BaseModel):
         if not p or len(p) < 1:
             raise ValueError('Пароль не может быть пустым')
         return p
+
+
+
 
 class UserResponse(BaseModel):
     id: int

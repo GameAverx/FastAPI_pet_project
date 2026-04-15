@@ -1,16 +1,23 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from app.models import user
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
+from app.core.database import init_bd, close_bd, engine
 from app.api.v1.auth import auth_router
-from app.core.database import Base, engine
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await init_bd()
+        yield
+        await close_bd()
 
-app.include_router(auth_router, tags=["auth"])
+app = FastAPI(lifespan=lifespan)
 
-
+app.include_router(auth_router)
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -19,25 +26,19 @@ async def get_index_page():
         return HTMLResponse(content=f.read())
 
 
-@app.post("/login")
-def login(email: str, password: str):
-    # Проверяем есть ли такой user
-
-    # Возращаем ответ
-
-    return {"item_id": item_id, "q": q}
-
-@app.post("/sign_up")
-def sign_up(item_id: int, q: str | None = None):
-    # Проверяем есть ли такой user
-
-    # Возращаем ответ
-
-    return {"item_id": item_id, "q": q}
+# Base.metadata.create_all(bind=engine)
 
 
-def is_exist(email: str, password: str) :
-    pass
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="127.0.0.1", port=8000)
 
+# taskkill /F /IM python.exe
 
-Base.metadata.create_all(bind=engine)
+# GameAverx
+# user@example.com
+# 555888123
+
+# Alex
+# user1235@example.com
+# stringst

@@ -510,7 +510,8 @@
             <a href="#">Комнаты</a>
             <a href="#">Сообщества</a>
             <button class="btn-outline-light" id="navLoginBtn"><i class="fas fa-key"></i> Вход</button>
-            <button class="btn-outline-light" id="navRegBtn"><i class="fas fa-key"></i> Регистарция</button>
+            <button class="btn-outline-light" id="navRegBtn"><i class="fas fa-key" onclick="ShowSign_up_modal()"></i> Регистарция</button>
+
         </div>
     </div>
 
@@ -613,7 +614,30 @@
     </div>
 </div>
 
+<div id="sign_up_modal" class="modal">
+    <div class="modal-card">
+        <i class="fas fa-moon" style="font-size: 2.5rem; color: #6687A5;"></i>
+        <h2>Вход в чат-пространство</h2>
+<!--        <input type="text" id="modalNick" placeholder="Ваш тёмный псевдоним" autocomplete="off">-->
+        <input type="text" id="modalUsername" placeholder="Username" autocomplete="off">
+        <input type="text" id="modalEmail" placeholder="Ваш email" autocomplete="off">
+        <input type="text" id="modalPassword" placeholder="Пароль">
+
+        <div class="modal-actions">
+            <button class="modal-cancel" id="modalSign_up_Cancel_Btn">Отмена</button>
+            <button class="modal-confirm" id="modalSign_up_Confirm_Btn">Зарегистрироваться</button>
+        </div>
+        <p style="font-size: 0.7rem; margin-top: 1rem;">⚡ Атмосфера конфиденциальности. Демо-версия интерфейса.</p>
+    </div>
+</div>
+
 <script>
+    const sign_up_modal = document.getElementById('sign_up_modal');
+
+    function ShowSign_up_modal() {
+        sign_up_modal.style.display = 'flex';
+    }
+
     (function() {
         // DOM elements
         const modal = document.getElementById('joinModal');
@@ -622,12 +646,16 @@
         const modalConfirm = document.getElementById('modalConfirmBtn');
         const modalCancel = document.getElementById('modalCancelBtn');
 
+
+
+
         // triggers
         const heroJoinBtn = document.getElementById('heroJoinBtn');
         const navLoginBtn = document.getElementById('navLoginBtn');
         const quickJoinBtn = document.getElementById('quickJoinBtn');
         const quickNickInput = document.getElementById('quickNickInput');
         const exploreBtn = document.getElementById('exploreBtn');
+
 
         // Helper: показать модалку с предзаполнением
         function showModal(prefillNick = '') {
@@ -636,7 +664,7 @@
             } else {
                 modalNick.value = '';
             }
-            if (!modalRoom.value) modalRoom.value = 'ShadowLounge';
+            if (!modalRoom.value) modalRoom.value = 'Shado12wLounge';
             modal.style.display = 'flex';
             modalNick.focus();
         }
@@ -662,7 +690,7 @@
             console.log(`[NexusChat] Пользователь ${finalNick} вошёл в комнату ${finalRoom}`);
             hideModal();
             // сбросим поле быстрого ника для удобства
-            if(quickNickInput) quickNickInput.value = '';
+            if (quickNickInput) quickNickInput.value = '';
         }
 
         // события для кнопок открытия модалки
